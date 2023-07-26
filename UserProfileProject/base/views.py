@@ -10,12 +10,14 @@ def home(request):
 def userSignUp(request):
     if request.method == 'POST':
         form = UserSignUPForm(request.POST)
-        if form.is_valid():
+        if form.is_valid() and request.POST.get('password') == request.POST.get('password2'):
             user = form.save(commit=False)
             user.set_password(form.cleaned_data['password'])
             user.save()
             print("successfully reqistered")
-            return redirect('home')  
+            return redirect('home') 
+        else:
+            print('password donot match') 
     else:
         form = UserSignUPForm()
    

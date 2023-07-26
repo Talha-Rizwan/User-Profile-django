@@ -5,7 +5,19 @@
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
+
+    <label>ReEnter Password : </label>
+    <input type="password" name="password2"/>
+
+
     <button type="submit">Register</button>
 </form>
+
+
+
+        <p>already signed up?</p>
+    <a href="{% url 'login' %}">Login</a>
+</div>
+
 
 {% endblock content %}

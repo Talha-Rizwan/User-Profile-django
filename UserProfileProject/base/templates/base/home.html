@@ -1,0 +1,12 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+<h3>Hello
+
+    {% if request.user.username %}
+    <span>{{request.user.username}}</span> 
+    {% endif %}
+</h3>
+
+{% endblock content %}

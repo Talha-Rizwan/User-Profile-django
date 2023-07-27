@@ -1,6 +1,8 @@
+"""All views for the base application."""
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ObjectDoesNotExist
 
 from .models import User
 from .forms import UserSignUPForm, UserProfileUpdateForm, ChangePasswordForm
@@ -8,9 +10,11 @@ from .forms import UserSignUPForm, UserProfileUpdateForm, ChangePasswordForm
 
 @login_required(login_url='login')
 def home(request):
+    """The main page in the application"""
     return render(request, 'base/home.html')
 
 def user_signup(request):
+    """Renders and handle the new user signup form."""
     if request.method == 'POST':
         form = UserSignUPForm(request.POST)
         if form.is_valid() and request.POST.get('password') == request.POST.get('password2'):
@@ -20,7 +24,7 @@ def user_signup(request):
             user.save()
             print("successfully reqistered")
             return redirect('home')
-        print('password donot match')
+        print('password do not match')
     else:
         form = UserSignUPForm()
 
@@ -28,11 +32,12 @@ def user_signup(request):
 
 @login_required(login_url='login')
 def user_logout(request):
+    """Renders and handle the user logout."""
     logout(request)
     return redirect('login')
 
 def user_login(request):
-
+    """renders and handle the user login form"""
     if request.user.is_authenticated:
         return redirect('home')
 
@@ -42,7 +47,7 @@ def user_login(request):
 
         try:
             user = User.objects.get(email = email)
-        except:
+        except ObjectDoesNotExist:
             print('user doesnot exist')
 
         user = authenticate(request, email=email, password=password)
@@ -52,11 +57,11 @@ def user_login(request):
             return redirect('home')
         print('username or password is not correct')
         return redirect('login')
-
     return render(request, 'base/login.html')
 
 @login_required(login_url='login')
 def update_user(request):
+    """Renders and handle the update user profile attributes form logic"""
     user = request.user
     form = UserProfileUpdateForm(instance=user)
 
@@ -71,6 +76,8 @@ def update_user(request):
 
 @login_required(login_url='login')
 def change_password(request):
+    """Renders and handle the user account change password logic."""
+
     if request.method == 'POST':
         form = ChangePasswordForm(request.POST, instance=request.user)
 
@@ -91,8 +98,6 @@ def change_password(request):
                 print("new password values do not match!")
             else:
                 print('incorrect old password')
-
     else:
         form = ChangePasswordForm()
-
     return render(request, 'base/updatePassword.html', {'form': form})

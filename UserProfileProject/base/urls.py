@@ -1,3 +1,4 @@
+"""All the url paths for the base application are managed"""
 from django.urls import path
 from . import views
 

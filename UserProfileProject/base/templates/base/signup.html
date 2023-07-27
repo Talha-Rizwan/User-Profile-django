@@ -4,21 +4,13 @@
 <h3>Sign Up Here</h3>
 <form method="post">
     {% csrf_token %}
-    {{ form.as_p }}
-
-    <div>
-        <label>ReEnter Password : </label>
-        <input type="password" name="password2"/>
-    </div>
-
-    <button type="submit">Register</button>
+        {{ form.as_p }}
+        <div>
+            <label>ReEnter Password : </label>
+            <input type="password" name="password2"/>
+        </div>
+        <button type="submit">Register</button>
 </form>
-
-
-
-        <p>already signed up? <a href="{% url 'login' %}">Login</a></p>
-    
-</div>
-
+    <p>already signed up? <a href="{% url 'login' %}">Login</a></p>
 
 {% endblock content %}

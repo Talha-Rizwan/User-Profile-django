@@ -1,5 +1,7 @@
-from .models import User
 from django import forms
+
+from .models import User
+
 
 class UserSignUPForm(forms.ModelForm):
     class Meta:
@@ -10,7 +12,6 @@ class UserSignUPForm(forms.ModelForm):
             'password': forms.PasswordInput(),
         }
 
-
 class UserProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = User
@@ -18,11 +19,9 @@ class UserProfileUpdateForm(forms.ModelForm):
 
 class ChangePasswordForm(forms.ModelForm):
     old_password = forms.CharField(label="Old Password", widget=forms.PasswordInput)
-
     new_password = forms.CharField(label="New Password", widget=forms.PasswordInput)
     again_new_password = forms.CharField(label="ReEnter New Password", widget=forms.PasswordInput)
-    
 
     class Meta:
         model = User
-        fields = []  
+        fields = []

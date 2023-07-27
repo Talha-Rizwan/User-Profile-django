@@ -3,38 +3,48 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
+from django.views import View
+from django.utils.decorators import method_decorator
+from django.views.generic.edit import UpdateView
+from django.urls import reverse_lazy
+from django.views.generic.edit import FormView
 
 from .models import User
 from .forms import UserSignUPForm, UserProfileUpdateForm, ChangePasswordForm
 
-
-@login_required(login_url='login')
-def home(request):
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class HomeView(View):
     """The main page in the application"""
-    return render(request, 'base/home.html')
 
-def user_signup(request):
-    """Renders and handle the new user signup form."""
-    if request.method == 'POST':
-        form = UserSignUPForm(request.POST)
-        if form.is_valid() and request.POST.get('password') == request.POST.get('password2'):
+    def get(self, request):
+        """Method to deal with rendering logic """
+        return render(request, 'base/home.html')
+
+class UserSignUpView(FormView):
+    """Renders and handles the new user signup form."""
+    template_name = 'base/signup.html'
+    form_class = UserSignUPForm
+    success_url = 'home'  # You can use reverse_lazy('home') if you prefer using URL names
+
+    def form_valid(self, form):
+        if form.cleaned_data['password'] == form.cleaned_data['re_enter_password']:
             user = form.save(commit=False)
             user.set_password(form.cleaned_data['password'])
-            user.status='Unverified'
+            user.status = 'Unverified'
             user.save()
-            print("successfully reqistered")
-            return redirect('home')
-        print('password do not match')
-    else:
-        form = UserSignUPForm()
+            print("Successfully registered")
+            return redirect(self.success_url)
+        print('Passwords do not match')
+        return self.render_to_response(self.get_context_data(form=form))
 
-    return render(request, 'base/signup.html', {'form': form})
 
-@login_required(login_url='login')
-def user_logout(request):
-    """Renders and handle the user logout."""
-    logout(request)
-    return redirect('login')
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class UserLogoutView(View):
+    """Renders and handles the user logout."""
+    def get(self, request):
+        """Method calls the logout user funciton. """
+        logout(request)
+        return redirect('login')
 
 def user_login(request):
     """renders and handle the user login form"""
@@ -59,45 +69,39 @@ def user_login(request):
         return redirect('login')
     return render(request, 'base/login.html')
 
-@login_required(login_url='login')
-def update_user(request):
-    """Renders and handle the update user profile attributes form logic"""
-    user = request.user
-    form = UserProfileUpdateForm(instance=user)
 
-    if request.method == 'POST':
-        form = UserProfileUpdateForm(request.POST, instance=user)
-        if form.is_valid():
-            form.save()
-            return redirect('home')
-    context = {'form': form}
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class UpdateUserView(UpdateView):
+    """Renders and handles the update user profile attributes form logic"""
+    template_name = 'base/update.html'
+    form_class = UserProfileUpdateForm
+    success_url = reverse_lazy('home')
 
-    return render(request, 'base/update.html', context)
+    def get_object(self, queryset=None):
+        return self.request.user
 
-@login_required(login_url='login')
-def change_password(request):
-    """Renders and handle the user account change password logic."""
 
-    if request.method == 'POST':
-        form = ChangePasswordForm(request.POST, instance=request.user)
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class ChangePasswordView(FormView):
+    """Renders and handles the user account change password logic."""
+    template_name = 'base/updatePassword.html'
+    form_class = ChangePasswordForm
 
-        if form.is_valid():
-            user = authenticate(
-                request,
-                email=request.user,
-                password=form.cleaned_data['old_password']
-                )
-            if user is not None :
-                if form.cleaned_data['new_password'] == form.cleaned_data['again_new_password']:
-                    new_password = form.cleaned_data['new_password']
-                    user = form.save(commit=False)
-                    user.set_password(new_password)
-                    user.save()
-                    print('password updated successfully!')
-                    return redirect('login')
-                print("new password values do not match!")
-            else:
-                print('incorrect old password')
-    else:
-        form = ChangePasswordForm()
-    return render(request, 'base/updatePassword.html', {'form': form})
+    def form_valid(self, form):
+        user = authenticate(
+            self.request,
+            email=self.request.user,
+            password=form.cleaned_data['old_password']
+        )
+
+        if user is not None:
+            if form.cleaned_data['new_password'] == form.cleaned_data['again_new_password']:
+                new_password = form.cleaned_data['new_password']
+                user.set_password(new_password)
+                user.save()
+                print('Password updated successfully!')
+                return redirect('login')
+            print("New password values do not match!")
+        else:
+            print('Incorrect old password')
+        return render(self.request, self.template_name, {'form': form})

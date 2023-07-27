@@ -7,6 +7,8 @@ from .models import User
 # pylint: disable=too-few-public-methods
 class UserSignUPForm(forms.ModelForm):
     """This class deals with user signp/registration"""
+    re_enter_password = forms.CharField(label="Re Enter Password", widget=forms.PasswordInput)
+
     class Meta:
         """User Signup form."""
         model = User

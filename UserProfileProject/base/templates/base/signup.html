@@ -6,17 +6,18 @@
     {% csrf_token %}
     {{ form.as_p }}
 
-    <label>ReEnter Password : </label>
-    <input type="password" name="password2"/>
-
+    <div>
+        <label>ReEnter Password : </label>
+        <input type="password" name="password2"/>
+    </div>
 
     <button type="submit">Register</button>
 </form>
 
 
 
-        <p>already signed up?</p>
-    <a href="{% url 'login' %}">Login</a>
+        <p>already signed up? <a href="{% url 'login' %}">Login</a></p>
+    
 </div>
 
 

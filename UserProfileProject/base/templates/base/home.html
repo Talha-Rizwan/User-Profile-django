@@ -2,10 +2,11 @@
 
 {% block content %}
 
-<h3>Hello
+<h3>Welcome</h3>
 
-    {% if request.user.username %}
-    <span>{{request.user.username}}</span> 
+    {% if request.user.email %}
+    <h3> Logged in from :
+    <span>{{request.user.email}}</span> 
     {% endif %}
 </h3>
 

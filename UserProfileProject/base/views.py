@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .forms import UserSignUPForm
+from .forms import UserSignUPForm, UserProfileUpdateForm
 from django.contrib.auth import authenticate, login, logout
 from .models import User
 # Create your views here.
@@ -13,6 +13,7 @@ def userSignUp(request):
         if form.is_valid() and request.POST.get('password') == request.POST.get('password2'):
             user = form.save(commit=False)
             user.set_password(form.cleaned_data['password'])
+            user.status='Unverified'
             user.save()
             print("successfully reqistered")
             return redirect('home') 
@@ -50,3 +51,16 @@ def userLogin(request):
 
     context = {}
     return render(request, 'base/login.html', context)
+
+def updateUser(request):
+    user = request.user
+    form = UserProfileUpdateForm(instance=user)
+
+    if request.method == 'POST':
+        form = UserProfileUpdateForm(request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+            return redirect('home')
+    context = {'form': form}
+
+    return render(request, 'base/update.html', context)

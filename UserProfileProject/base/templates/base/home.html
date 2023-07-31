@@ -2,6 +2,7 @@
 {% block content %}
     <h3>Welcome</h3>
         {% if request.user.email %}
+            <h3> Username : <span>{{request.user.username}}</span></h3>        
             <h3> Logged in from : <span>{{request.user.email}}</span></h3>
         {% endif %}
 {% endblock content %}

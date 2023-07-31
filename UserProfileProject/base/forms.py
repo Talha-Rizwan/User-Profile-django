@@ -11,12 +11,11 @@ class UserSignUPForm(forms.ModelForm):
     class Meta:
         """User Signup form."""
         model = User
-        fields = ('email', 'password', 're_enter_password', 'phone_number', 'address', 'gender')
+        fields = ('email', 'username', 'password', 're_enter_password', 'phone_number', 'address', 'gender')
         widgets = {
             'email': forms.EmailInput(),
             'password': forms.PasswordInput(),
         }
-        field_order = ['email', 'password', 're_enter_password', 'phone_number', 'address', 'gender']
 
 # pylint: disable=too-few-public-methods
 class UserProfileUpdateForm(forms.ModelForm):
@@ -24,7 +23,7 @@ class UserProfileUpdateForm(forms.ModelForm):
     class Meta:
         """User profile updation form"""
         model = User
-        fields = ('phone_number', 'address', 'gender')
+        fields = ('username', 'phone_number', 'address', 'gender')
 
 # pylint: disable = too-few-public-methods
 class ChangePasswordForm(forms.ModelForm):

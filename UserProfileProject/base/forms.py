@@ -1,5 +1,4 @@
 """All forms for base application."""
-
 from django import forms
 
 from .models import User
@@ -7,16 +6,17 @@ from .models import User
 # pylint: disable = too-few-public-methods
 class UserSignUPForm(forms.ModelForm):
     """This class deals with user signp/registration"""
-    re_enter_password = forms.CharField(label = "Re Enter Password", widget = forms.PasswordInput)
+    re_enter_password = forms.CharField(label="Re Enter Password", widget=forms.PasswordInput)
 
     class Meta:
         """User Signup form."""
         model = User
-        fields = ('email', 'password', 'phone_number', 'address', 'gender')
+        fields = ('email', 'password', 're_enter_password', 'phone_number', 'address', 'gender')
         widgets = {
             'email': forms.EmailInput(),
             'password': forms.PasswordInput(),
         }
+        field_order = ['email', 'password', 're_enter_password', 'phone_number', 'address', 'gender']
 
 # pylint: disable=too-few-public-methods
 class UserProfileUpdateForm(forms.ModelForm):
@@ -29,9 +29,9 @@ class UserProfileUpdateForm(forms.ModelForm):
 # pylint: disable = too-few-public-methods
 class ChangePasswordForm(forms.ModelForm):
     """This class deals with user password updation."""
-    old_password = forms.CharField(label = "Old Password", widget = forms.PasswordInput)
-    new_password = forms.CharField(label = "New Password", widget = forms.PasswordInput)
-    again_new_password = forms.CharField(label = "ReEnter New Password", widget = forms.PasswordInput)
+    old_password = forms.CharField(label="Old Password", widget=forms.PasswordInput)
+    new_password = forms.CharField(label="New Password", widget=forms.PasswordInput)
+    confirm_password = forms.CharField(label="Confirm Password", widget=forms.PasswordInput)
     class Meta:
         """User password updation form"""
         model = User

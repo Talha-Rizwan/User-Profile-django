@@ -12,7 +12,7 @@ from django.views.generic.edit import FormView
 from .models import User
 from .forms import UserSignUPForm, UserProfileUpdateForm, ChangePasswordForm
 
-@method_decorator(login_required(login_url='login'), name='dispatch')
+@method_decorator(login_required(login_url = 'login'), name = 'dispatch')
 class HomeView(View):
     """The main page in the application"""
 
@@ -35,10 +35,10 @@ class UserSignUpView(FormView):
             print("Successfully registered")
             return redirect(self.success_url)
         print('Passwords do not match')
-        return self.render_to_response(self.get_context_data(form=form))
+        return self.render_to_response(self.get_context_data(form = form))
 
 
-@method_decorator(login_required(login_url='login'), name='dispatch')
+@method_decorator(login_required(login_url = 'login'), name = 'dispatch')
 class UserLogoutView(View):
     """Renders and handles the user logout."""
     def get(self, request):
@@ -60,7 +60,7 @@ def user_login(request):
         except ObjectDoesNotExist:
             print('user doesnot exist')
 
-        user = authenticate(request, email=email, password=password)
+        user = authenticate(request, email = email, password = password)
 
         if user is not None:
             login(request, user)
@@ -70,18 +70,18 @@ def user_login(request):
     return render(request, 'base/login.html')
 
 
-@method_decorator(login_required(login_url='login'), name='dispatch')
+@method_decorator(login_required(login_url = 'login'), name = 'dispatch')
 class UpdateUserView(UpdateView):
     """Renders and handles the update user profile attributes form logic"""
     template_name = 'base/update.html'
     form_class = UserProfileUpdateForm
     success_url = reverse_lazy('home')
 
-    def get_object(self, queryset=None):
+    def get_object(self, queryset = None):
         return self.request.user
 
 
-@method_decorator(login_required(login_url='login'), name='dispatch')
+@method_decorator(login_required(login_url = 'login'), name = 'dispatch')
 class ChangePasswordView(FormView):
     """Renders and handles the user account change password logic."""
     template_name = 'base/updatePassword.html'

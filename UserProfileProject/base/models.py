@@ -19,9 +19,9 @@ class User(AbstractUser):
         (FEMALE, 'Female'),
     ]
     gender = models.CharField(
-        max_length=10,
-        choices=GENDER_CHOICES,
-        blank=True
+        max_length = 10,
+        choices = GENDER_CHOICES,
+        blank = True
     )
     ACTIVE = 'Active'
     INACTIVE = 'Inactive'
@@ -32,9 +32,9 @@ class User(AbstractUser):
         (UNVERIFIED, 'Unverified'),
     ]
     status = models.CharField(
-        max_length=10,
-        choices=STATUS_CHOICES,
-        default=UNVERIFIED,
+        max_length = 10,
+        choices = STATUS_CHOICES,
+        default = UNVERIFIED,
     )
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []

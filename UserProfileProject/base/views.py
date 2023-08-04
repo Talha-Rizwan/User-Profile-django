@@ -1,4 +1,4 @@
-"""All views for the base application."""
+'''All views for the base application.'''
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -14,17 +14,17 @@ from .forms import UserSignUPForm, UserProfileUpdateForm, ChangePasswordForm
 
 @method_decorator(login_required(login_url='login'), name='dispatch')
 class HomeView(View):
-    """The main page in the application"""
+    '''The main page in the application'''
 
     def get(self, request):
-        """Method to deal with rendering logic """
+        '''Method to deal with rendering logic '''
         return render(request, 'base/home.html')
 
 class UserSignUpView(FormView):
-    """Renders and handles the new user signup form."""
+    '''Renders and handles the new user signup form.'''
     template_name = 'base/signup.html'
     form_class = UserSignUPForm
-    success_url = 'home' 
+    success_url = 'home'
 
     def form_valid(self, form):
         if form.cleaned_data['password'] == form.cleaned_data['re_enter_password']:
@@ -32,21 +32,21 @@ class UserSignUpView(FormView):
             user.set_password(form.cleaned_data['password'])
             user.status = 'Unverified'
             user.save()
-            print("Successfully registered")
+            print('Successfully registered')
             return redirect(self.success_url)
         print('Passwords do not match')
         return self.render_to_response(self.get_context_data(form = form))
 
 @method_decorator(login_required(login_url='login'), name='dispatch')
 class UserLogoutView(View):
-    """Renders and handles the user logout."""
+    '''Renders and handles the user logout.'''
     def get(self, request):
-        """Method calls the logout user funciton. """
+        '''Method calls the logout user funciton. '''
         logout(request)
         return redirect('login')
 
 def user_login(request):
-    """renders and handle the user login form"""
+    '''renders and handle the user login form'''
     if request.user.is_authenticated:
         return redirect('home')
 
@@ -70,7 +70,7 @@ def user_login(request):
 
 @method_decorator(login_required(login_url='login'), name='dispatch')
 class UpdateUserView(UpdateView):
-    """Renders and handles the update user profile attributes form logic"""
+    '''Renders and handles the update user profile attributes form logic'''
     template_name = 'base/update.html'
     form_class = UserProfileUpdateForm
     success_url = reverse_lazy('home')
@@ -80,7 +80,7 @@ class UpdateUserView(UpdateView):
 
 @method_decorator(login_required(login_url='login'), name='dispatch')
 class ChangePasswordView(FormView):
-    """Renders and handles the user account change password logic."""
+    '''Renders and handles the user account change password logic.'''
     template_name = 'base/updatePassword.html'
     form_class = ChangePasswordForm
 
@@ -98,12 +98,14 @@ class ChangePasswordView(FormView):
                 user.save()
                 print('Password updated successfully!')
                 return redirect('login')
-            print("New password values do not match!")
+            print('New password values do not match!')
         else:
             print('Incorrect old password')
         return render(self.request, self.template_name, {'form': form})
 
+@method_decorator(login_required(login_url='login'), name='dispatch')
 class ShowProfilesView(ListView):
+    '''Renders the list of all user profiles available'''
     model = User
     template_name = 'base/profiles.html'
     context_object_name = 'profiles'

@@ -35,5 +35,7 @@ class User(AbstractUser):
         choices = STATUS_CHOICES,
         default = UNVERIFIED,
     )
+    profile_pic = models.ImageField(null=True, default="avatar.svg")
+    
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []

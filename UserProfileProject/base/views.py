@@ -104,3 +104,9 @@ class ChangePasswordView(FormView):
         else:
             print('Incorrect old password')
         return render(self.request, self.template_name, {'form': form})
+
+def showProfiles(request):
+    profiles = User.objects.all()
+    context = {'profiles':profiles}
+
+    return render(request, 'base/profiles.html', context)

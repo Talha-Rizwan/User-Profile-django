@@ -11,7 +11,7 @@ class UserSignUPForm(forms.ModelForm):
     class Meta:
         """User Signup form."""
         model = User
-        fields = ('email', 'username', 'password', 're_enter_password', 'phone_number', 'address', 'gender')
+        fields = ('email', 'username', 'password', 're_enter_password', 'phone_number', 'address', 'gender', 'profile_pic')
         widgets = {
             'email': forms.EmailInput(),
             'password': forms.PasswordInput(),
@@ -23,7 +23,7 @@ class UserProfileUpdateForm(forms.ModelForm):
     class Meta:
         """User profile updation form"""
         model = User
-        fields = ('username', 'phone_number', 'address', 'gender')
+        fields = ('username', 'phone_number', 'address', 'gender', 'profile_pic')
 
 # pylint: disable = too-few-public-methods
 class ChangePasswordForm(forms.ModelForm):

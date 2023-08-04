@@ -1,8 +1,14 @@
 {% extends 'main.html' %}
 {% block content %}
-    <h3>Welcome</h3>
-        {% if request.user.email %}
-            <h3> Username : <span>{{request.user.username}}</span></h3>        
-            <h3> Logged in from : <span>{{request.user.email}}</span></h3>
-        {% endif %}
+<h3>Welcome</h3>
+
+<div style="display: flex; justify-content: center;">
+    <img style="max-width: 100px; max-height: 100px; border-radius: 50%; margin: 20px;" src="{{request.user.profile_pic.url}}" />
+    <div>
+            {% if request.user.email %}
+                <h3> Username : <span>{{request.user.username}}</span></h3>        
+                <h3> Logged in from : <span>{{request.user.email}}</span></h3>
+            {% endif %}
+    </div>
+</div>
 {% endblock content %}

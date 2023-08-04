@@ -1,0 +1,13 @@
+<h2 style="display: flex; justify-content: center; text-decoration: underline;" >All Profiles</h2>
+
+{% for profile in profiles %}
+    <div style="display: flex; justify-content: center;">
+        <img style="width: 100px; height: 100px; margin: 20px;" src="{{profile.profile_pic.url}}" />
+        <div>
+            {% if request.user.email %}
+                <p> Username : <span>{{profile.username}}</span></p>        
+                <p> Email: <span>{{profile.email}}</span></p>
+            {% endif %}
+        </div>
+    </div>
+{% endfor %}

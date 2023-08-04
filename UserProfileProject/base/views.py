@@ -37,7 +37,6 @@ class UserSignUpView(FormView):
         print('Passwords do not match')
         return self.render_to_response(self.get_context_data(form = form))
 
-
 @method_decorator(login_required(login_url='login'), name='dispatch')
 class UserLogoutView(View):
     """Renders and handles the user logout."""
@@ -69,7 +68,6 @@ def user_login(request):
         return redirect('login')
     return render(request, 'base/login.html')
 
-
 @method_decorator(login_required(login_url='login'), name='dispatch')
 class UpdateUserView(UpdateView):
     """Renders and handles the update user profile attributes form logic"""
@@ -79,7 +77,6 @@ class UpdateUserView(UpdateView):
 
     def get_object(self, queryset=None):
         return self.request.user
-
 
 @method_decorator(login_required(login_url='login'), name='dispatch')
 class ChangePasswordView(FormView):

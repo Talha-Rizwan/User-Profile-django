@@ -41,6 +41,12 @@ INSTALLED_APPS = [
     'base.apps.BaseConfig',
 ]
 
+
+THIRD_PARTY_APPS = [
+    'django_cleanup'
+]
+
+
 AUTH_USER_MODEL = 'base.User'
 
 MIDDLEWARE = [

@@ -7,6 +7,7 @@ from django.views import View
 from django.utils.decorators import method_decorator
 from django.views.generic.edit import UpdateView, FormView
 from django.urls import reverse_lazy
+from django.views.generic import ListView
 
 from .models import User
 from .forms import UserSignUPForm, UserProfileUpdateForm, ChangePasswordForm
@@ -105,8 +106,7 @@ class ChangePasswordView(FormView):
             print('Incorrect old password')
         return render(self.request, self.template_name, {'form': form})
 
-def showProfiles(request):
-    profiles = User.objects.all()
-    context = {'profiles':profiles}
-
-    return render(request, 'base/profiles.html', context)
+class ShowProfilesView(ListView):
+    model = User
+    template_name = 'base/profiles.html'
+    context_object_name = 'profiles'
